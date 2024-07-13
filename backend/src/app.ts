@@ -2,7 +2,11 @@ import express, { Express, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors'; 
+
+import authRoutes from './routes/authRoutes';
 import diaryRoutes from './routes/diaryRoutes';
+
+import { auth } from './middleware/auth';
 
 dotenv.config();  // .envファイルから環境変数を読み込む
 
@@ -16,6 +20,9 @@ app.use(express.json());  // JSONリクエストボディの解析を可能に�
 
 // ルートの追加
 app.use('/api/diaries', diaryRoutes);
+
+app.use('/api/auth', authRoutes);
+app.use('/api/diaries', auth, diaryRoutes);
 
 // MongoDBへの接続
 mongoose.connect(process.env.MONGODB_URI as string)
