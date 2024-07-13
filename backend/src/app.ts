@@ -7,6 +7,7 @@ import authRoutes from './routes/authRoutes';
 import diaryRoutes from './routes/diaryRoutes';
 
 import { auth } from './middleware/auth';
+import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();  // .envファイルから環境変数を読み込む
 
@@ -23,6 +24,9 @@ app.use('/api/diaries', diaryRoutes);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/diaries', auth, diaryRoutes);
+
+// エラーハンドラーは他のミドルウェアの後に追加
+app.use(errorHandler);
 
 // MongoDBへの接続
 mongoose.connect(process.env.MONGODB_URI as string)
