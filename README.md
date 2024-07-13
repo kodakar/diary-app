@@ -1,4 +1,4 @@
-# Diary App
+# Diary App（開発中）
 
 This is a full-stack diary application built with MERN stack and OpenAI integration.
 
