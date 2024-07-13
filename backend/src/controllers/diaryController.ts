@@ -1,29 +1,36 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import Diary from '../models/Diary';
+import { generateAIFeedback } from '../services/openai';
+import { catchAsync } from '../utils/catchAsync';
+import { AppError } from '../utils/errors';
 
-// 新しい日記エントリーを作成
-export const createDiary = async (req: Request, res: Response) => {
+export const createDiary = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const { content, mood } = req.body;
+  const userId = req.user?.id;
+
+  if (!userId) {
+    return next(new AppError('User not authenticated', 401));
+  }
+
   try {
-    const { content, mood } = req.body;
-    const userId = req.user?.id;
-
-    if (!userId) {
-      return res.status(401).json({ message: 'User not authenticated' });
-    }
+    const aiAnalysis = await generateAIFeedback(content);
 
     const newDiary = new Diary({
       user: userId,
       content,
-      mood
+      mood,
+      aiAnalysis
     });
 
     const savedDiary = await newDiary.save();
     res.status(201).json(savedDiary);
   } catch (error) {
-    res.status(400).json({ message: 'Error creating diary entry', error });
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    next(new AppError('Error creating diary entry', 500));
   }
-};
-
+});
 // ユーザーの全ての日記エントリーを取得
 export const getDiaries = async (req: Request, res: Response) => {
   try {
