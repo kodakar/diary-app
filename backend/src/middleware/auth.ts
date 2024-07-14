@@ -16,7 +16,10 @@ export const auth = (req: Request, res: Response, next: NextFunction) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
     req.user = { id: decoded.userId };
     next();
+    // console.log('Next called');
   } catch (error) {
-    res.status(401).send({ error: 'Please authenticate.' });
+    // console.error('Auth error:', error);
+    res.status(401).json({ error: 'Please authenticate.' });
   }
 };
+
