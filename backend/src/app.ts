@@ -29,7 +29,9 @@ app.use('/api/diaries', auth, diaryRoutes);
 app.use(errorHandler);
 
 // MongoDBへの接続
-mongoose.connect(process.env.MONGODB_URI as string)
+console.log('MONGODB_URI:', process.env.MONGODB_URI); // デバッグ用
+const mongoURI = process.env.MONGODB_URI as string;
+mongoose.connect(mongoURI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((error) => console.error('MongoDB connection error:', error));
 
