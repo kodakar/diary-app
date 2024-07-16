@@ -213,6 +213,7 @@ describe('Integration Tests', () => {
     });
 
     it('should delete a diary entry', async () => {
+      // 日記エントリーの作成
       const createResponse = await request(app)
         .post('/api/diaries')
         .set('Authorization', `Bearer ${authToken}`)
@@ -220,21 +221,22 @@ describe('Integration Tests', () => {
           content: 'To be deleted',
           mood: 'Anxious'
         });
-
+    
       const diaryId = createResponse.body._id;
-
+    
+      // 削除リクエスト
       const deleteResponse = await request(app)
         .delete(`/api/diaries/${diaryId}`)
         .set('Authorization', `Bearer ${authToken}`);
-
+    
       expect(deleteResponse.status).toBe(200);
       expect(deleteResponse.body).toHaveProperty('message', 'Diary deleted successfully');
-
-      // Verify the entry is actually deleted
+    
+      // 削除確認
       const getResponse = await request(app)
         .get(`/api/diaries/${diaryId}`)
         .set('Authorization', `Bearer ${authToken}`);
-
+    
       expect(getResponse.status).toBe(404);
     });
   });
