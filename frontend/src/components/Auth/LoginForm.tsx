@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
+import { login } from '../../services/api';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login: authLogin } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // ここにログイン処理のロジックを実装します
-    console.log('Login attempt:', { email, password });
+    try {
+      const response = await login(email, password);
+      authLogin(response.token);
+      // ログイン成功後の処理（例：ダッシュボードへのリダイレクト）
+    } catch (error) {
+      console.error('Login failed:', error);
+      // エラーメッセージの表示
+    }
   };
 
   return (
