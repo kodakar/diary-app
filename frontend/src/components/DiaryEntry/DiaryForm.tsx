@@ -1,12 +1,30 @@
 import React, { useState } from 'react';
+import { createDiary, DiaryEntry } from '../../services/api';
 
-const DiaryForm: React.FC = () => {
+interface DiaryFormProps {
+  onDiaryCreated: (diary: DiaryEntry) => void;
+}
+
+const DiaryForm: React.FC<DiaryFormProps> = ({ onDiaryCreated }) => {
   const [content, setContent] = useState('');
+  const [mood, setMood] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // ここに日記エントリー送信のロジックを実装します
-    console.log('Diary entry submitted:', content);
+    setIsLoading(true);
+    try {
+      const newDiary = await createDiary(content, mood);
+      onDiaryCreated(newDiary);
+      setContent('');
+      setMood('');
+      setError('');
+    } catch (err) {
+      setError('日記の作成に失敗しました。');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -14,9 +32,19 @@ const DiaryForm: React.FC = () => {
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Write your diary entry here..."
+        placeholder="今日はどんな一日でしたか？"
+        required
       />
-      <button type="submit">Save Entry</button>
+      <input
+        type="text"
+        value={mood}
+        onChange={(e) => setMood(e.target.value)}
+        placeholder="今の気分は？"
+      />
+      {error && <p className="error">{error}</p>}
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? '保存中...' : '日記を保存'}
+      </button>
     </form>
   );
 };

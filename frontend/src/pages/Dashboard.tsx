@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DiaryForm from '../components/DiaryEntry/DiaryForm';
 import DiaryList from '../components/DiaryEntry/DiaryList';
+import { DiaryEntry } from '../services/api';
 
 const Dashboard: React.FC = () => {
-  const mockEntries = [
-    { id: '1', content: 'This is a sample entry', date: '2024-01-01' },
-  ];
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleDiaryCreated = (newDiary: DiaryEntry) => {
+    // 新しい日記が作成されたら、リストを更新するためにrefreshKeyを変更
+    setRefreshKey(prevKey => prevKey + 1);
+  };
 
   return (
     <div>
-      <h1>Your Dashboard</h1>
-      <DiaryForm />
-      <DiaryList entries={mockEntries} />
+      <h1>ダッシュボード</h1>
+      <DiaryForm onDiaryCreated={handleDiaryCreated} />
+      <DiaryList key={refreshKey} />
     </div>
   );
 };
