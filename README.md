@@ -1,20 +1,38 @@
-# Diary App（開発中）
+# AI Diary Assistant（開発中）
 
-This is a full-stack diary application built with MERN stack and OpenAI integration.
+AI Diary Assistantは、ユーザーが日記を書き、AIからフィードバックを受けられるプラットフォームです。このアプリケーションは、日記作成のモチベーションを高め、ライティングスキルを向上させるための包括的なツールを提供します。
 
-## Features
-- User authentication
-- Create, read, update, and delete diary entries
-- AI-powered writing feedback
+## 主な機能
 
-## Technologies
-- Frontend: React with TypeScript
-- Backend: Node.js, Express, and TypeScript
-- Database: MongoDB
-- AI: OpenAI API
+- **ユーザー認証**: ユーザーは登録、ログイン、ログアウトを通じて自分のアカウントを管理できます。
+- **日記のCRUD操作**: ユーザーは日記を作成、読取、更新、削除することができます。
+- **AIによるフィードバック**: OpenAI APIを使用して、日記の内容を分析し、フィードバックを生成します。
+- **ユーザープロフィール管理**: ユーザーは自分のプロフィールを管理し、過去の日記やフィードバックを確認できます。
 
-## Setup
-1. Clone the repository
-2. Install dependencies for both frontend and backend
-3. Set up environment variables
-4. Run the development servers
+## 技術スタック
+
+### バックエンド
+
+- **言語**: TypeScript
+- **ランタイム**: Node.js
+- **フレームワーク**: Express.js
+- **データベース**: MongoDB (Mongoose ODM)
+- **認証**: JSON Web Tokens (JWT)
+- **テスト**: Jest
+- **AI統合**: OpenAI API
+
+### フロントエンド
+
+- **フレームワーク**: React (Create React App)
+- **状態管理**: Redux
+- **UIライブラリ**: Material-UI
+- **HTTPクライアント**: Axios
+
+<!-- ### 開発ツール
+
+- **バージョン管理**: Git, GitHub
+- **パッケージマネージャ**: npm
+- **リンター**: ESLint
+- **フォーマッター**: Prettier
+- **API開発/テスト**: Postman
+ -->
