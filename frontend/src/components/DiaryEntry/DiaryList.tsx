@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getDiaries, DiaryEntry } from '../../services/api';
+import { getDiaries, deleteDiary, DiaryEntry } from '../../services/api';
 
 const DiaryList: React.FC = () => {
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
@@ -18,6 +18,17 @@ const DiaryList: React.FC = () => {
       setError('日記の取得に失敗しました。');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm('本当にこの日記を削除しますか？')) {
+      try {
+        await deleteDiary(id);
+        setDiaries(diaries.filter(d => d._id !== id));
+      } catch (err) {
+        setError('日記の削除に失敗しました。');
+      }
     }
   };
 
@@ -51,6 +62,7 @@ const DiaryList: React.FC = () => {
               <p><strong>総合スコア:</strong> {diary.aiAnalysis.overallScore}/10</p>
             </div>
           )}
+          <button onClick={() => handleDelete(diary._id)}>削除</button>
         </div>
       ))}
     </div>
