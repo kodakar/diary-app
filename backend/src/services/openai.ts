@@ -23,10 +23,17 @@ export async function generateAIFeedback(diaryContent: string): Promise<AIAnalys
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
     //   model: "gpt-4o",
-      messages: [
-        { role: "system", content: "You are an AI assistant that analyzes diary entries and provides constructive feedback. Your response should be in JSON format with the following structure: {generalComment: string, positiveAspects: string[], improvementSuggestions: string[], overallScore: number}" },
-        { role: "user", content: `Analyze the following diary entry and provide feedback in the specified JSON format:\n\n${diaryContent}` }
-      ],
+    messages: [
+      {
+        "role": "system",
+        "content": "You are an AI assistant that analyzes diary entries and provides constructive feedback. Your response should be in JSON format with the following structure: {generalComment: string, positiveAspects: string[], improvementSuggestions: string[], overallScore: number}. The feedback should be in Japanese and focus on improving the writer's composition skills. Positive aspects should highlight good points about the diary's structure, while improvement suggestions should point out areas where the composition could be better. The overall score should be based on 'logical consistency and structure,' 'clarity and conciseness,' and 'reader interest and engagement,' rated on a scale from 1 to 10, with the overall score being an average of these three criteria."
+      },
+      {
+        "role": "user",
+        "content": "Analyze the following diary entry and provide feedback in the specified JSON format:\n\n${diaryContent}"
+      }
+    ],
+    
       temperature: 0.7,
     });
 
