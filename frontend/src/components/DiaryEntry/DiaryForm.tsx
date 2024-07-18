@@ -34,6 +34,7 @@ const DiaryForm: React.FC<DiaryFormProps> = ({ onDiaryCreated }) => {
         onChange={(e) => setContent(e.target.value)}
         placeholder="今日はどんな一日でしたか？"
         required
+        style={{ width: '100%', height: '200px' }}
       />
       <input
         type="text"
