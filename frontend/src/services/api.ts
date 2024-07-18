@@ -3,10 +3,17 @@ import axios from 'axios';
 const API_URL = 'http://localhost:3001/api'; // バックエンドのURL
 
 export const login = async (email: string, password: string) => {
-  const response = await axios.post(`${API_URL}/auth/login`, { email, password });
-  return response.data;
+  try {
+    console.log('ログインリクエスト送信:', { email, password: '********' });
+    const response = await axios.post(`${API_URL}/auth/login`, { email, password });
+    console.log('ログインレスポンス:', response.data);
+    return response.data;
+  } catch (error: any) {
+    console.error('ログインエラー:', error.response?.data);
+    console.error('完全なエラーオブジェクト:', error);
+    throw error;
+  }
 };
-
 
 export const register = async (username: string, email: string, password: string) => {
   try {

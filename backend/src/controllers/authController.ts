@@ -59,13 +59,22 @@ export const register = catchAsync(async (req: Request, res: Response, next: Nex
 
 export const login = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  console.log('ログイン試行:', { email });
 
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return next(new AppError('Invalid credentials', 401));
+  const user = await User.findOne({ email });
+  if (!user) {
+    console.log('ユーザーが見つかりません:', email);
+    return next(new AppError('無効な認証情報', 401));
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    console.log('パスワードが無効です:', email);
+    return next(new AppError('無効な認証情報', 401));
   }
 
   const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
+  console.log('ログイン成功:', { email, userId: user._id });
 
   const userResponse = {
     _id: user._id,
